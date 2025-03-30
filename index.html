@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Dilema del Prisionero</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>El Dilema del Prisionero</h1>
+        
+        <div class="game-info">
+            <p>Elije tu estrategia: <span id="round-counter">Ronda 1 de 6</span></p>
+            <div class="score">
+                <p>Tu puntuación: <span id="player-score">0</span></p>
+                <p>Puntuación del adversario: <span id="opponent-score">0</span></p>
+            </div>
+        </div>
+
+        <div class="game-area" id="choice-buttons">
+            <div class="choice" id="cooperate">
+                <button class="choice-button">
+                    <i class="fas fa-handshake"></i>
+                    <span>Cooperar</span>
+                </button>
+            </div>
+            <div class="choice" id="betray">
+                <button class="choice-button">
+                    <i class="fas fa-user-ninja"></i>
+                    <span>Traicionar</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="results-table">
+            <h2>Historial de Rondas</h2>
+            <table id="game-history">
+                <thead>
+                    <tr>
+                        <th>Ronda</th>
+                        <th>Tu elección</th>
+                        <th>Elección del adversario</th>
+                        <th>Pts. ronda</th>
+                        <th>Pts. acum.</th>
+                        <th>Pts. ronda</th>
+                        <th>Pts. acum.</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="2">Tú</th>
+                        <th colspan="2">Adversario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Las filas se agregarán dinámicamente con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="game-over" class="hidden">
+            <h2>¡Juego terminado!</h2>
+            <p id="final-message"></p>
+            <button id="play-again">Jugar de nuevo</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
