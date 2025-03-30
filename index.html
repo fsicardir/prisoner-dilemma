@@ -19,6 +19,44 @@
             </div>
         </div>
 
+        <!-- Los botones ahora están antes que la tabla -->
+        <div class="desktop-buttons">
+            <div class="choice" id="cooperate-desktop">
+                <button class="choice-button">
+                    <i class="fas fa-handshake"></i>
+                    <span>Cooperar</span>
+                </button>
+            </div>
+            <div class="choice" id="betray-desktop">
+                <button class="choice-button">
+                    <i class="fas fa-user-ninja"></i>
+                    <span>Traicionar</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="results-table">
+            <h2>Historial de Rondas</h2>
+            <table id="game-history">
+                <thead>
+                    <tr>
+                        <th><abbr title="Ronda">R</abbr></th>
+                        <th><abbr title="Tu elección">Tu elec.</abbr></th>
+                        <th><abbr title="Elección del adversario">Adv. elec.</abbr></th>
+                        <th><abbr title="Tus puntos">Tus pts.</abbr></th>
+                        <th><abbr title="Puntos adversario">Adv. pts.</abbr></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Las filas se agregarán dinámicamente con JavaScript -->
+                </tbody>
+                <tfoot>
+                    <!-- La fila de totales se agregará dinámicamente -->
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Botones para móvil (fijos en la parte inferior) -->
         <div class="game-area" id="choice-buttons">
             <div class="choice" id="cooperate">
                 <button class="choice-button">
@@ -32,33 +70,6 @@
                     <span>Traicionar</span>
                 </button>
             </div>
-        </div>
-
-        <div class="results-table">
-            <h2>Historial de Rondas</h2>
-            <table id="game-history">
-                <thead>
-                    <tr>
-                        <th>Ronda</th>
-                        <th>Tu elección</th>
-                        <th>Elección del adversario</th>
-                        <th>Pts. ronda</th>
-                        <th>Pts. acum.</th>
-                        <th>Pts. ronda</th>
-                        <th>Pts. acum.</th>
-                    </tr>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th colspan="2">Tú</th>
-                        <th colspan="2">Adversario</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Las filas se agregarán dinámicamente con JavaScript -->
-                </tbody>
-            </table>
         </div>
 
         <div id="game-over" class="hidden">

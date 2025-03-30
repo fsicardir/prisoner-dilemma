@@ -2,13 +2,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Elementos del DOM
     const cooperateButton = document.querySelector('#cooperate .choice-button');
     const betrayButton = document.querySelector('#betray .choice-button');
+    const cooperateDesktopButton = document.querySelector('#cooperate-desktop .choice-button');
+    const betrayDesktopButton = document.querySelector('#betray-desktop .choice-button');
     const roundCounter = document.getElementById('round-counter');
     const playerScoreDisplay = document.getElementById('player-score');
     const opponentScoreDisplay = document.getElementById('opponent-score');
     const gameHistoryTable = document.getElementById('game-history').querySelector('tbody');
+    const gameHistoryFooter = document.getElementById('game-history').querySelector('tfoot');
     const gameOverDiv = document.getElementById('game-over');
     const finalMessage = document.getElementById('final-message');
     const playAgainButton = document.getElementById('play-again');
+    const gameArea = document.getElementById('choice-buttons');
+    const desktopButtons = document.querySelector('.desktop-buttons');
 
     // Variables del juego
     let currentRound = 1;
@@ -17,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let opponentScore = 0;
     let playerLastChoice = null;
     let gameHistory = [];
+
+    // Comprobar si estamos en un dispositivo móvil
+    const isMobile = window.innerWidth < 768;
 
     // Matriz de puntuación del dilema del prisionero
     // [player choice][opponent choice] => [player points, opponent points]
@@ -44,9 +52,25 @@ document.addEventListener('DOMContentLoaded', function() {
         opponentScoreDisplay.textContent = opponentScore;
         
         gameHistoryTable.innerHTML = '';
+        gameHistoryFooter.innerHTML = ''; // Limpiar la fila de totales
         gameOverDiv.classList.add('hidden');
         
         enableButtons();
+        
+        // En móvil, asegurarnos de que los botones sean visibles
+        if (isMobile) {
+            gameArea.style.display = 'flex';
+            desktopButtons.style.display = 'none';
+            
+            // Scroll al top después de iniciar un nuevo juego
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        } else {
+            desktopButtons.style.display = 'flex';
+            gameArea.style.display = 'none';
+        }
     }
 
     // Función para procesar la elección del jugador
@@ -76,7 +100,10 @@ document.addEventListener('DOMContentLoaded', function() {
         playerLastChoice = playerChoice;
         
         // Agregar la ronda al historial
-        addToHistory(currentRound, playerChoice, opponentChoice, playerPoints, opponentPoints, playerScore, opponentScore);
+        addToHistory(currentRound, playerChoice, opponentChoice, playerPoints, opponentPoints);
+        
+        // Actualizar la fila de totales
+        updateTotalsRow();
         
         // Avanzar a la siguiente ronda o finalizar el juego
         currentRound++;
@@ -89,11 +116,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Función para agregar una ronda al historial
-    function addToHistory(round, playerChoice, opponentChoice, playerPoints, opponentPoints, playerAccPoints, opponentAccPoints) {
+    function addToHistory(round, playerChoice, opponentChoice, playerPoints, opponentPoints) {
         const row = document.createElement('tr');
         row.classList.add('highlight');
         
-        // Iconos para las elecciones
+        // Iconos para las elecciones - Más pequeños para móvil
         const playerIcon = playerChoice === 'cooperar' 
             ? '<i class="fas fa-handshake cooperate-icon"></i>' 
             : '<i class="fas fa-user-ninja betray-icon"></i>';
@@ -102,17 +129,31 @@ document.addEventListener('DOMContentLoaded', function() {
             ? '<i class="fas fa-handshake cooperate-icon"></i>' 
             : '<i class="fas fa-user-ninja betray-icon"></i>';
         
+        // En móvil, no mostramos las palabras, solo los iconos
+        const playerChoiceDisplay = isMobile 
+            ? playerIcon 
+            : `${playerIcon} ${playerChoice}`;
+            
+        const opponentChoiceDisplay = isMobile 
+            ? opponentIcon 
+            : `${opponentIcon} ${opponentChoice}`;
+        
         row.innerHTML = `
             <td>${round}</td>
-            <td>${playerIcon} ${playerChoice}</td>
-            <td>${opponentIcon} ${opponentChoice}</td>
+            <td>${playerChoiceDisplay}</td>
+            <td>${opponentChoiceDisplay}</td>
             <td>${playerPoints}</td>
-            <td>${playerAccPoints}</td>
             <td>${opponentPoints}</td>
-            <td>${opponentAccPoints}</td>
         `;
         
         gameHistoryTable.appendChild(row);
+        
+        // En móvil, hacer scroll automático a la tabla para ver la nueva fila
+        if (isMobile) {
+            setTimeout(() => {
+                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
         
         // Guardar en el array de historial
         gameHistory.push({
@@ -120,10 +161,25 @@ document.addEventListener('DOMContentLoaded', function() {
             playerChoice,
             opponentChoice,
             playerPoints,
-            opponentPoints,
-            playerAccPoints,
-            opponentAccPoints
+            opponentPoints
         });
+    }
+    
+    // Función para actualizar la fila de totales
+    function updateTotalsRow() {
+        // Limpiar el footer
+        gameHistoryFooter.innerHTML = '';
+        
+        // Crear la fila de totales
+        const totalRow = document.createElement('tr');
+        
+        totalRow.innerHTML = `
+            <td colspan="3">Total</td>
+            <td>${playerScore}</td>
+            <td>${opponentScore}</td>
+        `;
+        
+        gameHistoryFooter.appendChild(totalRow);
     }
     
     // Función para finalizar el juego
@@ -145,20 +201,34 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Habilitar/deshabilitar botones
     function disableButtons() {
+        // Deshabilitar botones móviles
         cooperateButton.disabled = true;
         betrayButton.disabled = true;
         cooperateButton.style.opacity = 0.5;
         betrayButton.style.opacity = 0.5;
+        
+        // Deshabilitar botones de escritorio
+        cooperateDesktopButton.disabled = true;
+        betrayDesktopButton.disabled = true;
+        cooperateDesktopButton.style.opacity = 0.5;
+        betrayDesktopButton.style.opacity = 0.5;
     }
     
     function enableButtons() {
+        // Habilitar botones móviles
         cooperateButton.disabled = false;
         betrayButton.disabled = false;
         cooperateButton.style.opacity = 1;
         betrayButton.style.opacity = 1;
+        
+        // Habilitar botones de escritorio
+        cooperateDesktopButton.disabled = false;
+        betrayDesktopButton.disabled = false;
+        cooperateDesktopButton.style.opacity = 1;
+        betrayDesktopButton.style.opacity = 1;
     }
     
-    // Event Listeners
+    // Event Listeners para botones móviles
     cooperateButton.addEventListener('click', function() {
         processChoice('cooperar');
     });
@@ -167,7 +237,26 @@ document.addEventListener('DOMContentLoaded', function() {
         processChoice('traicionar');
     });
     
+    // Event Listeners para botones de escritorio
+    cooperateDesktopButton.addEventListener('click', function() {
+        processChoice('cooperar');
+    });
+    
+    betrayDesktopButton.addEventListener('click', function() {
+        processChoice('traicionar');
+    });
+    
     playAgainButton.addEventListener('click', initGame);
+    
+    // Manejar cambio de orientación en móviles
+    window.addEventListener('resize', function() {
+        const newIsMobile = window.innerWidth < 768;
+        
+        // Solo actualizar si el estado de móvil ha cambiado
+        if (newIsMobile !== isMobile) {
+            location.reload(); // La forma más sencilla de aplicar todos los cambios es recargar
+        }
+    });
     
     // Iniciar el juego
     initGame();
