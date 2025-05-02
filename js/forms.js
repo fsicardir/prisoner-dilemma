@@ -20,7 +20,7 @@ export function generateIRIQuestions() {
             const radio = document.createElement('input');
             radio.type = 'radio';
             radio.name = `iri_${index}`;
-            radio.value = optionIndex + 1;
+            radio.value = optionIndex;
             
             optionLabel.appendChild(radio);
             optionLabel.appendChild(document.createTextNode(option));
@@ -52,7 +52,7 @@ export function generateMDMQQuestions() {
             const radio = document.createElement('input');
             radio.type = 'radio';
             radio.name = `mdmq_${index}`;
-            radio.value = optionIndex + 1;
+            radio.value = optionIndex;
             
             optionLabel.appendChild(radio);
             optionLabel.appendChild(document.createTextNode(option));

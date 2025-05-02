@@ -1,5 +1,7 @@
 import { elements, isMobile, showSection } from './dom.js';
 import { SCORE_MATRIX, MAX_ROUNDS } from './constants.js';
+import { saveUserResponses } from './firebase-config.js';
+import { collectAllResponses } from './utils.js';
 
 // Game state
 let currentRound = 1;
@@ -7,6 +9,9 @@ let playerScore = 0;
 let opponentScore = 0;
 let playerLastChoice = null;
 let gameHistory = [];
+let roundStartTime = null;
+let gameStartTime = null;
+let totalGameTime = 0;
 
 // Initialize the game
 export function initGame() {
@@ -15,8 +20,9 @@ export function initGame() {
     opponentScore = 0;
     playerLastChoice = null;
     gameHistory = [];
+    gameStartTime = Date.now();
+    totalGameTime = 0;
     
-    elements.game.roundCounter.textContent = `Ronda ${currentRound} de ${MAX_ROUNDS}`;
     elements.game.playerScoreDisplay.textContent = playerScore;
     elements.game.opponentScoreDisplay.textContent = opponentScore;
     
@@ -37,12 +43,22 @@ export function initGame() {
     }
     
     enableButtons();
+    
+    // If setupTooltips is in the window object, call it
+    if (typeof window.setupTooltips === 'function') {
+        window.setupTooltips();
+    }
 }
 
 // Process player's choice
 export function processChoice(playerChoice) {
     // Disable buttons to prevent multiple clicks
     disableButtons();
+    
+    // Calculate time taken for this round
+    const roundEndTime = Date.now();
+    const timeTaken = (roundEndTime - roundStartTime) / 1000; // Convert to seconds
+    totalGameTime += timeTaken;
     
     // Store player's choice
     playerLastChoice = playerChoice;
@@ -61,21 +77,32 @@ export function processChoice(playerChoice) {
     elements.game.playerScoreDisplay.textContent = playerScore;
     elements.game.opponentScoreDisplay.textContent = opponentScore;
     
-    // Add to history
-    addToHistory(currentRound, playerChoice, opponentChoice, playerPoints, opponentPoints);
+    // Record in game history
+    const roundData = {
+        round: currentRound,
+        playerChoice,
+        opponentChoice,
+        playerPoints,
+        opponentPoints,
+        timeTaken
+    };
+    
+    gameHistory.push(roundData);
+    
+    // Add to history table
+    addToHistory(currentRound, playerChoice, opponentChoice, playerPoints, opponentPoints, timeTaken);
     
     // Check if game is over
     if (currentRound >= MAX_ROUNDS) {
         endGame();
     } else {
         currentRound++;
-        elements.game.roundCounter.textContent = `Ronda ${currentRound} de ${MAX_ROUNDS}`;
         enableButtons();
     }
 }
 
 // Add round to history
-function addToHistory(round, playerChoice, opponentChoice, playerPoints, opponentPoints) {
+function addToHistory(round, playerChoice, opponentChoice, playerPoints, opponentPoints, timeTaken) {
     const row = document.createElement('tr');
     
     const roundCell = document.createElement('td');
@@ -93,11 +120,15 @@ function addToHistory(round, playerChoice, opponentChoice, playerPoints, opponen
     const opponentPointsCell = document.createElement('td');
     opponentPointsCell.textContent = opponentPoints;
     
+    const timeCell = document.createElement('td');
+    timeCell.textContent = timeTaken.toFixed(1) + 's';
+    
     row.appendChild(roundCell);
     row.appendChild(playerCell);
     row.appendChild(opponentCell);
     row.appendChild(playerPointsCell);
     row.appendChild(opponentPointsCell);
+    row.appendChild(timeCell);
     
     elements.game.gameHistoryTable.appendChild(row);
     updateTotalsRow();
@@ -120,15 +151,19 @@ function updateTotalsRow() {
     const opponentTotalCell = document.createElement('td');
     opponentTotalCell.textContent = opponentScore;
     
+    const timeTotalCell = document.createElement('td');
+    timeTotalCell.textContent = totalGameTime.toFixed(1) + 's';
+    
     row.appendChild(emptyCell);
     row.appendChild(playerTotalCell);
     row.appendChild(opponentTotalCell);
+    row.appendChild(timeTotalCell);
     
     elements.game.gameHistoryFooter.appendChild(row);
 }
 
 // End the game
-function endGame() {
+async function endGame() {
     // Hide game buttons
     if (isMobile) {
         elements.game.gameArea.style.display = 'none';
@@ -153,8 +188,24 @@ function endGame() {
         }
         
         // Add event listener to navigate to the next section
-        elements.game.continueButton.addEventListener('click', () => {
-            showSection('agradecimiento');
+        elements.game.continueButton.addEventListener('click', async () => {
+            // Change button to loading state
+            const originalText = elements.game.continueButton.textContent;
+            elements.game.continueButton.disabled = true;
+            elements.game.continueButton.textContent = 'Guardando...';
+            
+            try {
+                // Save user data to Firestore
+                await saveUserData();
+                // Navigate to the next section
+                showSection('agradecimiento');
+            } catch (error) {
+                console.error("Error saving user data:", error);
+                alert("Error al guardar los datos. Intente nuevamente.");
+                // Restore button to original state
+                elements.game.continueButton.disabled = false;
+                elements.game.continueButton.textContent = originalText;
+            }
         });
     }
     
@@ -166,6 +217,37 @@ function endGame() {
     gameButtons.forEach(button => {
         button.style.display = 'none';
     });
+}
+
+// Save user data to Firestore
+async function saveUserData() {
+    try {
+        // Collect form responses
+        const questionnaireResponses = collectAllResponses();
+        
+        // Add game data
+        const gameData = {
+            playerFinalScore: playerScore,
+            opponentFinalScore: opponentScore,
+            gameHistory: gameHistory,
+            totalGameTime: totalGameTime,
+            timestamp: new Date().toISOString()
+        };
+        
+        // Combine all data
+        const userData = {
+            ...questionnaireResponses,
+            game: gameData,
+            submittedAt: new Date().toISOString()
+        };
+        
+        // Save to Firestore
+        await saveUserResponses(userData);
+        console.log("User data saved successfully");
+    } catch (error) {
+        console.error("Error saving user data:", error);
+        throw error; // Re-throw to be handled by caller
+    }
 }
 
 // Export the continue button element
@@ -184,6 +266,9 @@ function disableButtons() {
 
 // Enable game buttons
 function enableButtons() {
+    // Start the timer for this round
+    roundStartTime = Date.now();
+    
     if (isMobile) {
         elements.game.cooperateButton.disabled = false;
         elements.game.betrayButton.disabled = false;

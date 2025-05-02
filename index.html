@@ -26,6 +26,9 @@
                 
                 <p>"Con la firma de este consentimiento informado Usted no renuncia a los derechos que posee de acuerdo con el Código Civil y las leyes argentinas en materia de responsabilidad civil por daños"</p>
             </div>
+            <form id="consent-form" style="display:none;">
+                <input type="hidden" name="consent_choice" id="consent-choice" value="">
+            </form>
             <div class="consent-buttons">
                 <button id="accept-consent" class="btn">Acepto</button>
                 <button id="reject-consent" class="btn">No acepto</button>
@@ -133,6 +136,7 @@
                 <p>Se le presentará a continuación con una actividad en la que deberá decidir si cooperar o no con un tercero a lo largo de una determinada cantidad de rondas.</p>
                 <p>Su <b>objetivo</b> es conseguir la <b>mayor cantidad de puntos posibles</b>, no únicamente superar a tu oponente.</p>
                 <p>Si ambos <span style="color: green;">cooperan</span> el resultado es relativamente bueno para ambos <b>(3 puntos para cada uno)</b>. Si ambos se <span style="color: red;">traicionan</span>, conseguirán cada uno un mal resultado <b>(1 punto cada uno)</b>. Sin embargo, si uno <span style="color: green;">coopera</span> y el otro <span style="color: red;">traiciona</span>, quien <span style="color: green;">coopera</span> conseguirá el peor resultado posible <b>(0 puntos)</b>, y quien <span style="color: red;">traiciona</span> conseguirá el mejor resultado posible <b>(5 puntos)</b>.</p>
+                <p>Ten en cuenta, que tu oponente también decide en cada ronda si cooperar o traicionar, por lo que la cantidad de puntos que recibirás dependerá de la <b>combinación entre tu elección y la de tu oponente</b>.</p>
             </div>
             <button id="start-game" class="btn">Entendido</button>
         </section>
@@ -141,7 +145,19 @@
         <section id="juego" class="section hidden">
             <h1>Escenario de Cooperación</h1>
             <div class="game-info">
-                <p>Elije tu estrategia: <span id="round-counter">Ronda 1 de 6</span></p>
+                <p>
+                  <span class="tooltip-trigger">Sistema de puntuación <i class="fas fa-info-circle"></i>
+                    <span class="tooltip-content">
+                      <span class="tooltip-text">
+                        <span class="coop">Cooperar + Cooperar = 3 puntos cada uno</span><br>
+                        <span class="betray">Traicionar + Traicionar = 1 punto cada uno</span><br>
+                        <span class="mixed">Cooperar + Traicionar</span><br>
+                        <span class="coop-result">Quien coopera = 0 puntos</span><br>
+                        <span class="betray-result">Quien traiciona = 5 puntos</span>
+                      </span>
+                    </span>
+                  </span>
+                </p>
                 <div class="score">
                     <p>Tu puntuación: <span id="player-score">0</span></p>
                     <p>Puntuación del adversario: <span id="opponent-score">0</span></p>
@@ -209,6 +225,10 @@
         </section>
     </div>
 
+    <!-- Firebase SDK -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+    
     <script type="module" src="js/main.js"></script>
 </body>
 </html> 

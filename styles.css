@@ -423,4 +423,95 @@ tfoot td {
     th, td {
         padding: 12px;
     }
+}
+
+/* Tooltip styles */
+.tooltip-trigger {
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    color: #3498db;
+    font-weight: bold;
+    z-index: 100;
+}
+
+.tooltip-trigger i {
+    margin-left: 5px;
+}
+
+.tooltip-content {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    z-index: 1000;
+    width: 280px;
+    left: 0;
+    transform: none;
+    top: 30px;
+    transition: opacity 0.3s, visibility 0.3s;
+    pointer-events: none;
+}
+
+.tooltip-trigger:hover .tooltip-content {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.tooltip-text {
+    display: block;
+    line-height: 1.6;
+}
+
+.coop {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.betray {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.mixed {
+    font-weight: bold;
+}
+
+.coop-result {
+    color: #27ae60;
+    margin-left: 15px;
+}
+
+.betray-result {
+    color: #e74c3c;
+    margin-left: 15px;
+}
+
+/* Mobile-specific tooltip adjustments */
+@media (max-width: 768px) {
+    .tooltip-content {
+        width: 250px;
+        font-size: 14px;
+        top: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    /* Force show class for mobile */
+    .tooltip-content.show {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    /* Make sure the tooltip doesn't extend beyond screen edges */
+    .game-info {
+        position: relative;
+    }
 } 

@@ -6,6 +6,7 @@ export const elements = {
         reject: document.getElementById('reject-consent')
     },
     forms: {
+        consent: document.getElementById('consent-form'),
         sociodemografico: document.getElementById('sociodemografico-form'),
         iri: document.getElementById('iri-form'),
         mdmq: document.getElementById('mdmq-form')
@@ -17,7 +18,6 @@ export const elements = {
         betrayButton: document.querySelector('#betray .choice-button'),
         cooperateDesktopButton: document.querySelector('#cooperate-desktop .choice-button'),
         betrayDesktopButton: document.querySelector('#betray-desktop .choice-button'),
-        roundCounter: document.getElementById('round-counter'),
         playerScoreDisplay: document.getElementById('player-score'),
         opponentScoreDisplay: document.getElementById('opponent-score'),
         gameHistoryTable: document.getElementById('game-history').querySelector('tbody'),
