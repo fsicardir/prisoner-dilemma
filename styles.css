@@ -17,15 +17,28 @@ body {
 
 .container {
     width: 100%;
-    padding: 15px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 20px;
+}
+
+.section {
+    display: none;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.section.active {
+    display: block;
 }
 
 h1 {
     text-align: center;
-    margin: 15px 0;
+    margin-bottom: 20px;
     color: #2c3e50;
-    font-size: 1.8rem;
 }
 
 h2 {
@@ -35,6 +48,74 @@ h2 {
     text-align: center;
 }
 
+/* Estilos para el consentimiento informado */
+.consent-text {
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+.consent-text p {
+    margin-bottom: 15px;
+}
+
+.consent-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Estilos para formularios */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.radio-group, .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-group label, .checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Estilos para botones */
+.btn {
+    padding: 12px 24px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+/* Estilos para el juego */
 .game-info {
     display: flex;
     flex-direction: column;
@@ -53,7 +134,7 @@ h2 {
 
 /* Botones de escritorio (ocultos en móvil) */
 .desktop-buttons {
-    display: none; /* Ocultos por defecto en móvil */
+    display: none;
     flex-direction: row;
     justify-content: center;
     gap: 30px;
@@ -137,8 +218,8 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    font-size: 0.7rem; /* Más pequeño para móvil */
-    table-layout: fixed; /* Fijar ancho de las columnas */
+    font-size: 0.7rem;
+    table-layout: fixed;
 }
 
 th, td {
@@ -150,14 +231,12 @@ th, td {
     white-space: nowrap;
 }
 
-/* Optimización para móviles: columnas más estrechas */
-th:nth-child(1), td:nth-child(1) { width: 15%; } /* Ronda */
+th:nth-child(1), td:nth-child(1) { width: 15%; }
 th:nth-child(2), td:nth-child(2),
-th:nth-child(3), td:nth-child(3) { width: 30%; } /* Elecciones */
+th:nth-child(3), td:nth-child(3) { width: 30%; }
 th:nth-child(4), td:nth-child(4),
-th:nth-child(5), td:nth-child(5) { width: 12.5%; } /* Puntos */
+th:nth-child(5), td:nth-child(5) { width: 12.5%; }
 
-/* Abreviar texto en móviles */
 th abbr {
     text-decoration: none;
 }
@@ -165,14 +244,13 @@ th abbr {
 th {
     background-color: #34495e;
     color: white;
-    font-weight: normal; /* Menos pesado para móvil */
+    font-weight: normal;
 }
 
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-/* Fila de totales */
 tfoot tr {
     background-color: #ecf0f1;
     font-weight: bold;
@@ -226,7 +304,6 @@ tfoot td {
     display: none;
 }
 
-/* Efectos para las celdas de la tabla */
 .highlight {
     animation: highlight 1s ease;
 }
@@ -236,48 +313,59 @@ tfoot td {
     100% { background-color: inherit; }
 }
 
+/* Estilos para las instrucciones */
+.instructions {
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+/* Estilos para el mensaje de agradecimiento */
+.thank-you-message {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.thank-you-message a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.thank-you-message a:hover {
+    text-decoration: underline;
+}
+
 /* Media queries para tablets y escritorio */
 @media (min-width: 768px) {
     body {
-        padding-bottom: 0; /* Quitar el padding para los botones fijos */
+        padding-bottom: 0;
     }
     
     .container {
-        max-width: 760px;
-        padding: 20px;
+        padding: 30px;
     }
     
-    h1 {
-        font-size: 2.2rem;
-        margin: 20px 0;
+    .section {
+        padding: 30px;
     }
     
-    h2 {
-        font-size: 1.6rem;
+    .form-group {
+        margin-bottom: 25px;
     }
     
-    .game-info {
+    .radio-group, .checkbox-group {
         flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .score {
-        flex-direction: row;
+        flex-wrap: wrap;
         gap: 20px;
     }
     
-    /* Mostrar botones de escritorio */
     .desktop-buttons {
         display: flex;
     }
     
-    /* Ocultar botones móviles en escritorio */
     .game-area {
         display: none;
     }
     
-    /* Estilo para los botones de escritorio */
     .desktop-buttons .choice {
         width: auto;
     }
@@ -296,8 +384,8 @@ tfoot td {
     
     table {
         font-size: 0.9rem;
-        min-width: 0; /* Quitar ancho mínimo para evitar scroll */
-        table-layout: auto; /* Permitir que las columnas se ajusten al contenido */
+        min-width: 0;
+        table-layout: auto;
     }
     
     th, td {
@@ -314,7 +402,6 @@ tfoot td {
         padding: 12px 8px;
     }
     
-    /* Quitar reglas de ancho específicas para desktop */
     th:nth-child(1), td:nth-child(1),
     th:nth-child(2), td:nth-child(2),
     th:nth-child(3), td:nth-child(3),

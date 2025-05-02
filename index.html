@@ -3,82 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Dilema del Prisionero</title>
+    <title>Trabajo de investigación final - Joaquín Sicardi</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>El Dilema del Prisionero</h1>
-        
-        <div class="game-info">
-            <p>Elije tu estrategia: <span id="round-counter">Ronda 1 de 6</span></p>
-            <div class="score">
-                <p>Tu puntuación: <span id="player-score">0</span></p>
-                <p>Puntuación del adversario: <span id="opponent-score">0</span></p>
+        <!-- Sección 1: Consentimiento Informado -->
+        <section id="consentimiento" class="section active">
+            <h1>Trabajo de investigación final - Joaquín Sicardi</h1>
+            <h2>Consentimiento Informado</h2>
+            <div class="consent-text">
+                <p>Joaquín Sicardi me ha explicado que está realizando un trabajo de investigación, Correlación entre niveles de empatía cognitiva y emocional y estilos de toma de decisión en elecciones de posible cooperación en estudiantes universitarios que residen en la Ciudad Autónoma de Buenos Aires.; en la Facultad de Psicología y Psicopedagogía de la Universidad Católica Argentina, cuya finalidad es conocer la relación entre niveles de empatía cognitiva y emocional y estilos de toma de decisión en elecciones de posible cooperación. Para ello realizará un estudio con 100 estudiantes universitarios que residen en la Ciudad Autónoma de Buenos Aires.</p>
+                
+                <p>Mi participación es voluntaria, puedo rehusarme a participar o abandonarla en cualquier momento, sin tener que expresar las razones de mi decisión y sin ninguna pérdida de beneficios a los que tengo derecho, sin sufrir discriminación, penalización o perjuicio.</p>
+                
+                <p>Mis datos de identificación se mantendrán en forma confidencial, mediante la codificación de los cuestionarios, aún en caso de publicación de los resultados de la investigación, según la Ley Nº 25.326. Tanto el investigador principal, Joaquín Sicardi, como quienes trabajen en este protocolo, se comprometen a cumplir con la Ley Nacional 25.326 de Protección de Datos (Habeas Data).</p>
+                
+                <p>Entiendo que al ser un estudio inicial, no es posible realizar un diagnóstico o indicar un tratamiento, debido a que el objetivo principal del estudio es poder conocer la relación entre los niveles de empatía cognitiva y emocional y estilos de toma de decisión en elecciones de posible cooperación. Comprendo que los resultados de la investigación me serán proporcionados si los solicito y que Joaquín Sicardi es a quien tengo que contactar en caso de que tenga alguna pregunta acerca del estudio o sobre mis derechos de participar en el mismo, pudiéndolo ubicar en la sede de la UCA, Alicia Moreau de Justo 1500, Facultad de Psicología y Psicopedagogía, teléfono 4349-0200 (1107) en el horario de 9:00 a 17:00.</p>
+                
+                <p>Habiendo comprendido lo que se me ha explicado, acepto participar en la investigación.</p>
+                
+                <p>"Con la firma de este consentimiento informado Usted no renuncia a los derechos que posee de acuerdo con el Código Civil y las leyes argentinas en materia de responsabilidad civil por daños"</p>
             </div>
-        </div>
+            <div class="consent-buttons">
+                <button id="accept-consent" class="btn">Acepto</button>
+                <button id="reject-consent" class="btn">No acepto</button>
+            </div>
+        </section>
 
-        <!-- Los botones ahora están antes que la tabla -->
-        <div class="desktop-buttons">
-            <div class="choice" id="cooperate-desktop">
-                <button class="choice-button">
-                    <i class="fas fa-handshake"></i>
-                    <span>Cooperar</span>
-                </button>
-            </div>
-            <div class="choice" id="betray-desktop">
-                <button class="choice-button">
-                    <i class="fas fa-user-ninja"></i>
-                    <span>Traicionar</span>
-                </button>
-            </div>
-        </div>
+        <!-- Sección 2: Cuestionario Sociodemográfico -->
+        <section id="sociodemografico" class="section hidden">
+            <h1>Cuestionario Sociodemográfico</h1>
+            <form id="sociodemografico-form">
+                <div class="form-group">
+                    <label>1. Sexo</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="sexo" value="hombre"> Hombre</label>
+                        <label><input type="radio" name="sexo" value="mujer"> Mujer</label>
+                        <label><input type="radio" name="sexo" value="otro"> Otro: <input type="text" name="sexo_otro"></label>
+                    </div>
+                </div>
 
-        <div class="results-table">
-            <h2>Historial de Rondas</h2>
-            <table id="game-history">
-                <thead>
-                    <tr>
-                        <th><abbr title="Ronda">R</abbr></th>
-                        <th><abbr title="Tu elección">Tu elec.</abbr></th>
-                        <th><abbr title="Elección del adversario">Adv. elec.</abbr></th>
-                        <th><abbr title="Tus puntos">Tus pts.</abbr></th>
-                        <th><abbr title="Puntos adversario">Adv. pts.</abbr></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Las filas se agregarán dinámicamente con JavaScript -->
-                </tbody>
-                <tfoot>
-                    <!-- La fila de totales se agregará dinámicamente -->
-                </tfoot>
-            </table>
-        </div>
+                <div class="form-group">
+                    <label>2. Edad</label>
+                    <input type="number" name="edad" max="120">
+                </div>
 
-        <!-- Botones para móvil (fijos en la parte inferior) -->
-        <div class="game-area" id="choice-buttons">
-            <div class="choice" id="cooperate">
-                <button class="choice-button">
-                    <i class="fas fa-handshake"></i>
-                    <span>Cooperar</span>
-                </button>
-            </div>
-            <div class="choice" id="betray">
-                <button class="choice-button">
-                    <i class="fas fa-user-ninja"></i>
-                    <span>Traicionar</span>
-                </button>
-            </div>
-        </div>
+                <div class="form-group">
+                    <label>3. ¿Padece algún trastorno psicopatologico?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="padece_trastorno" value="si"> Sí</label>
+                        <label><input type="radio" name="padece_trastorno" value="no"> No</label>
+                    </div>
+                </div>
 
-        <div id="game-over" class="hidden">
-            <h2>¡Juego terminado!</h2>
-            <p id="final-message"></p>
-            <button id="play-again">Jugar de nuevo</button>
-        </div>
+                <div class="form-group">
+                    <label>4. En caso de padecer algun trastorno psicopatologico, ¿cual o cuales?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="diagnosticos" value="trastornos_estado_animo"> Trastornos del estado de ánimo</label>
+                        <label><input type="checkbox" name="diagnosticos" value="trastorno_espectro_autista"> Trastorno del espectro autista</label>
+                        <label><input type="checkbox" name="diagnosticos" value="trastornos_sueno"> Trastornos del sueño (insomnio, etc)</label>
+                        <label><input type="checkbox" name="diagnosticos" value="trastorno_especifico_lenguaje"> Trastorno específico del lenguaje</label>
+                        <label><input type="checkbox" name="diagnosticos" value="tdah"> Trastorno por déficit de atención e hiperactividad</label>
+                        <label><input type="checkbox" name="diagnosticos" value="otros"> Otros: <input type="text" name="diagnosticos_otros"></label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>5. Nivel Educativo</label>
+                    <select name="nivel_educativo">
+                        <option value="">Seleccione una opción</option>
+                        <option value="primario_incompleto">Primario incompleto</option>
+                        <option value="primario_completo">Primario completo</option>
+                        <option value="secundario_incompleto">Secundario incompleto</option>
+                        <option value="secundario_completo">Secundario completo</option>
+                        <option value="universitario_incompleto">Universitario incompleto</option>
+                        <option value="universitario_completo">Universitario completo</option>
+                        <option value="posgrado">Posgrado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>6. En caso de estar estudiando/haber estudiado una carrera universitaria o posgrado ¿Cuál es?</label>
+                    <input type="text" name="carrera">
+                </div>
+
+                <div class="form-group">
+                    <label>7. ¿En qué año inició sus estudios en el nivel educativo más alto que ha alcanzado hasta el momento?</label>
+                    <input type="text" name="anio_inicio">
+                </div>
+
+                <div class="form-group">
+                    <label>8. Lugar de residencia</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="residencia" value="caba"> CABA</label>
+                        <label><input type="radio" name="residencia" value="otro"> Otro: <input type="text" name="residencia_otro"></label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Siguiente</button>
+            </form>
+        </section>
+
+        <!-- Sección 3: Interpersonal Reactivity Index -->
+        <section id="iri" class="section hidden">
+            <h1>Interpersonal Reactivity Index (IRI)</h1>
+            <p class="instructions">Las siguientes frases se refieren a tus pensamientos y sentimientos en diversas situaciones. Para cada ítem marcá con una cruz el casillero correspondiente indicando como te describe. Del 1 al 5 marca una opción por frase.</p>
+            <form id="iri-form">
+                <!-- Las preguntas se agregarán dinámicamente con JavaScript -->
+                <button type="submit" class="btn">Siguiente</button>
+            </form>
+        </section>
+
+        <!-- Sección 4: Melbourne Decision Making Questionnaire -->
+        <section id="mdmq" class="section hidden">
+            <h1>Melbourne Decision Making Questionnaire</h1>
+            <p class="instructions">Las personas difieren en la forma en que toman decisiones. Por favor indique cómo usted toma decisiones marcando para cada pregunta la respuesta que mejor se adapte a su estilo habitual.</p>
+            <form id="mdmq-form">
+                <!-- Las preguntas se agregarán dinámicamente con JavaScript -->
+                <button type="submit" class="btn">Siguiente</button>
+            </form>
+        </section>
+
+        <!-- Sección 5: Explicación Actividad -->
+        <section id="explicacion-actividad" class="section hidden">
+            <h1>Explicación: Escenario de Cooperación</h1>
+            <div class="activity-explanation">
+                <p>Se le presentará a continuación con una actividad en la que deberá decidir si cooperar o no con un tercero a lo largo de una determinada cantidad de rondas.</p>
+                <p>Su <b>objetivo</b> es conseguir la <b>mayor cantidad de puntos posibles</b>, no únicamente superar a tu oponente.</p>
+                <p>Si ambos <span style="color: green;">cooperan</span> el resultado es relativamente bueno para ambos <b>(3 puntos para cada uno)</b>. Si ambos se <span style="color: red;">traicionan</span>, conseguirán cada uno un mal resultado <b>(1 punto cada uno)</b>. Sin embargo, si uno <span style="color: green;">coopera</span> y el otro <span style="color: red;">traiciona</span>, quien <span style="color: green;">coopera</span> conseguirá el peor resultado posible <b>(0 puntos)</b>, y quien <span style="color: red;">traiciona</span> conseguirá el mejor resultado posible <b>(5 puntos)</b>.</p>
+            </div>
+            <button id="start-game" class="btn">Entendido</button>
+        </section>
+
+        <!-- Sección 6: Juego del Dilema del Prisionero -->
+        <section id="juego" class="section hidden">
+            <h1>Escenario de Cooperación</h1>
+            <div class="game-info">
+                <p>Elije tu estrategia: <span id="round-counter">Ronda 1 de 6</span></p>
+                <div class="score">
+                    <p>Tu puntuación: <span id="player-score">0</span></p>
+                    <p>Puntuación del adversario: <span id="opponent-score">0</span></p>
+                </div>
+            </div>
+
+            <div class="desktop-buttons">
+                <div class="choice" id="cooperate-desktop">
+                    <button class="choice-button">
+                        <i class="fas fa-handshake"></i>
+                        <span>Cooperar</span>
+                    </button>
+                </div>
+                <div class="choice" id="betray-desktop">
+                    <button class="choice-button">
+                        <i class="fas fa-user-ninja"></i>
+                        <span>Traicionar</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="results-table">
+                <h2>Historial de Rondas</h2>
+                <table id="game-history">
+                    <thead>
+                        <tr>
+                            <th><abbr title="Ronda">R</abbr></th>
+                            <th><abbr title="Tu elección">Tu elec.</abbr></th>
+                            <th><abbr title="Elección del adversario">Adv. elec.</abbr></th>
+                            <th><abbr title="Tus puntos">Tus pts.</abbr></th>
+                            <th><abbr title="Puntos adversario">Adv. pts.</abbr></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las filas se agregarán dinámicamente con JavaScript -->
+                    </tbody>
+                    <tfoot>
+                        <!-- La fila de totales se agregará dinámicamente -->
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="game-area" id="choice-buttons">
+                <div class="choice" id="cooperate">
+                    <button class="choice-button">
+                        <i class="fas fa-handshake"></i>
+                        <span>Cooperar</span>
+                    </button>
+                </div>
+                <div class="choice" id="betray">
+                    <button class="choice-button">
+                        <i class="fas fa-user-ninja"></i>
+                        <span>Traicionar</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 7: Agradecimiento -->
+        <section id="agradecimiento" class="section hidden">
+            <h1>¡Gracias por participar!</h1>
+            <div class="thank-you-message">
+                <p>Ante cualquier consulta, puede contactar a Joaquín Sicardi a través del siguiente correo electrónico: <a href="mailto:joaquinsicardi@uca.edu.ar">joaquinsicardi@uca.edu.ar</a></p>
+            </div>
+        </section>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html> 
