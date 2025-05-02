@@ -21,6 +21,7 @@ export function generateIRIQuestions() {
             radio.type = 'radio';
             radio.name = `iri_${index}`;
             radio.value = optionIndex;
+            radio.required = true;
             
             optionLabel.appendChild(radio);
             optionLabel.appendChild(document.createTextNode(option));
@@ -53,6 +54,7 @@ export function generateMDMQQuestions() {
             radio.type = 'radio';
             radio.name = `mdmq_${index}`;
             radio.value = optionIndex;
+            radio.required = true;
             
             optionLabel.appendChild(radio);
             optionLabel.appendChild(document.createTextNode(option));

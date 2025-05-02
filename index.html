@@ -42,7 +42,7 @@
                 <div class="form-group">
                     <label>1. Sexo</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="sexo" value="hombre"> Hombre</label>
+                        <label><input type="radio" name="sexo" value="hombre" required> Hombre</label>
                         <label><input type="radio" name="sexo" value="mujer"> Mujer</label>
                         <label><input type="radio" name="sexo" value="otro"> Otro: <input type="text" name="sexo_otro"></label>
                     </div>
@@ -50,32 +50,32 @@
 
                 <div class="form-group">
                     <label>2. Edad</label>
-                    <input type="number" name="edad" max="120">
+                    <input type="number" name="edad" max="120" required>
                 </div>
 
                 <div class="form-group">
                     <label>3. ¿Padece algún trastorno psicopatologico?</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="padece_trastorno" value="si"> Sí</label>
-                        <label><input type="radio" name="padece_trastorno" value="no"> No</label>
+                        <label><input type="radio" name="padece_trastorno" value="si" required onchange="toggleDiagnosticos(true)"> Sí</label>
+                        <label><input type="radio" name="padece_trastorno" value="no" onchange="toggleDiagnosticos(false)"> No</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="diagnosticos-group">
                     <label>4. En caso de padecer algun trastorno psicopatologico, ¿cual o cuales?</label>
                     <div class="checkbox-group">
-                        <label><input type="checkbox" name="diagnosticos" value="trastornos_estado_animo"> Trastornos del estado de ánimo</label>
-                        <label><input type="checkbox" name="diagnosticos" value="trastorno_espectro_autista"> Trastorno del espectro autista</label>
-                        <label><input type="checkbox" name="diagnosticos" value="trastornos_sueno"> Trastornos del sueño (insomnio, etc)</label>
-                        <label><input type="checkbox" name="diagnosticos" value="trastorno_especifico_lenguaje"> Trastorno específico del lenguaje</label>
-                        <label><input type="checkbox" name="diagnosticos" value="tdah"> Trastorno por déficit de atención e hiperactividad</label>
-                        <label><input type="checkbox" name="diagnosticos" value="otros"> Otros: <input type="text" name="diagnosticos_otros"></label>
+                        <label><input type="checkbox" name="diagnosticos" value="trastornos_estado_animo" class="diagnostico-checkbox"> Trastornos del estado de ánimo</label>
+                        <label><input type="checkbox" name="diagnosticos" value="trastorno_espectro_autista" class="diagnostico-checkbox"> Trastorno del espectro autista</label>
+                        <label><input type="checkbox" name="diagnosticos" value="trastornos_sueno" class="diagnostico-checkbox"> Trastornos del sueño (insomnio, etc)</label>
+                        <label><input type="checkbox" name="diagnosticos" value="trastorno_especifico_lenguaje" class="diagnostico-checkbox"> Trastorno específico del lenguaje</label>
+                        <label><input type="checkbox" name="diagnosticos" value="tdah" class="diagnostico-checkbox"> Trastorno por déficit de atención e hiperactividad</label>
+                        <label><input type="checkbox" name="diagnosticos" value="otros" class="diagnostico-checkbox"> Otros: <input type="text" name="diagnosticos_otros" id="diagnosticos-otros"></label>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>5. Nivel Educativo</label>
-                    <select name="nivel_educativo">
+                    <select name="nivel_educativo" required onchange="toggleCarrera(this.value)">
                         <option value="">Seleccione una opción</option>
                         <option value="primario_incompleto">Primario incompleto</option>
                         <option value="primario_completo">Primario completo</option>
@@ -87,20 +87,20 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="carrera-group">
                     <label>6. En caso de estar estudiando/haber estudiado una carrera universitaria o posgrado ¿Cuál es?</label>
-                    <input type="text" name="carrera">
+                    <input type="text" name="carrera" id="carrera-input">
                 </div>
 
                 <div class="form-group">
                     <label>7. ¿En qué año inició sus estudios en el nivel educativo más alto que ha alcanzado hasta el momento?</label>
-                    <input type="text" name="anio_inicio">
+                    <input type="number" name="anio_inicio" required min="1900" max="2025" pattern="\d{4}" placeholder="YYYY">
                 </div>
 
                 <div class="form-group">
                     <label>8. Lugar de residencia</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="residencia" value="caba"> CABA</label>
+                        <label><input type="radio" name="residencia" value="caba" required> CABA</label>
                         <label><input type="radio" name="residencia" value="otro"> Otro: <input type="text" name="residencia_otro"></label>
                     </div>
                 </div>
@@ -228,6 +228,111 @@
     <!-- Firebase SDK -->
     <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+    
+    <script>
+        // Function to toggle diagnosticos fields based on "padece_trastorno" answer
+        function toggleDiagnosticos(required) {
+            const checkboxes = document.querySelectorAll('.diagnostico-checkbox');
+            const diagnosticosGroup = document.getElementById('diagnosticos-group');
+            const diagnosticosOtros = document.getElementById('diagnosticos-otros');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.disabled = !required;
+                // Remove required attribute regardless of the selection
+                checkbox.removeAttribute('required');
+                if (!required) {
+                    checkbox.checked = false;
+                }
+            });
+            
+            if (diagnosticosOtros) {
+                diagnosticosOtros.disabled = !required;
+                if (!required) diagnosticosOtros.value = '';
+            }
+            
+            diagnosticosGroup.style.opacity = required ? '1' : '0.5';
+        }
+        
+        // Function to toggle carrera field based on "nivel_educativo" selection
+        function toggleCarrera(value) {
+            const carreraInput = document.getElementById('carrera-input');
+            const carreraGroup = document.getElementById('carrera-group');
+            const requireCarrera = ['universitario_incompleto', 'universitario_completo', 'posgrado'].includes(value);
+            
+            carreraInput.disabled = !requireCarrera;
+            
+            if (requireCarrera) {
+                carreraInput.setAttribute('required', 'required');
+                carreraGroup.style.opacity = '1';
+            } else {
+                carreraInput.removeAttribute('required');
+                carreraInput.value = '';
+                carreraGroup.style.opacity = '0.5';
+            }
+        }
+        
+        // Initialize form fields on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleDiagnosticos(false);
+            toggleCarrera('');
+            
+            // Add event listeners for "otro" (other) options
+            
+            // For sexo (gender)
+            const sexoOptions = document.querySelectorAll('input[name="sexo"]');
+            const sexoOtroInput = document.querySelector('input[name="sexo_otro"]');
+            sexoOtroInput.disabled = true;
+            
+            sexoOptions.forEach(option => {
+                option.addEventListener('change', function() {
+                    if (this.value === 'otro' && this.checked) {
+                        sexoOtroInput.disabled = false;
+                        sexoOtroInput.required = true;
+                    } else if (this.checked) {
+                        sexoOtroInput.disabled = true;
+                        sexoOtroInput.required = false;
+                        sexoOtroInput.value = '';
+                    }
+                });
+            });
+            
+            // For diagnosticos (diagnosis)
+            const diagnosticosOtro = document.querySelector('input[name="diagnosticos"][value="otros"]');
+            const diagnosticosOtroInput = document.getElementById('diagnosticos-otros');
+            
+            diagnosticosOtro.addEventListener('change', function() {
+                diagnosticosOtroInput.disabled = !this.checked;
+                diagnosticosOtroInput.required = this.checked;
+                if (!this.checked) {
+                    diagnosticosOtroInput.value = '';
+                }
+            });
+            
+            // For residencia (residence)
+            const residenciaOptions = document.querySelectorAll('input[name="residencia"]');
+            const residenciaOtroInput = document.querySelector('input[name="residencia_otro"]');
+            residenciaOtroInput.disabled = true;
+            
+            residenciaOptions.forEach(option => {
+                option.addEventListener('change', function() {
+                    if (this.value === 'otro' && this.checked) {
+                        residenciaOtroInput.disabled = false;
+                        residenciaOtroInput.required = true;
+                    } else if (this.checked) {
+                        residenciaOtroInput.disabled = true;
+                        residenciaOtroInput.required = false;
+                        residenciaOtroInput.value = '';
+                    }
+                });
+            });
+            
+            // Set max year for question 7 to current year
+            const currentYear = new Date().getFullYear();
+            const yearInput = document.querySelector('input[name="anio_inicio"]');
+            yearInput.max = currentYear;
+        });
+        
+    </script>
     
     <script type="module" src="js/main.js"></script>
 </body>

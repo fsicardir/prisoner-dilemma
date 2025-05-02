@@ -73,16 +73,16 @@ export const MDMQ_QUESTIONS = [
 
 // Scale options for IRI
 export const IRI_SCALE_OPTIONS = [
-    "No me describe bien",
-    "Me describe un poco",
-    "Me describe bastante bien",
-    "Me describe bien",
-    "Me describe muy bien"
+    "1. No me describe bien",
+    "2. Me describe un poco",
+    "3. Me describe bastante bien",
+    "4. Me describe bien",
+    "5. Me describe muy bien"
 ];
 
 // Scale options for MDMQ
 export const MDMQ_SCALE_OPTIONS = [
-    "Es cierto para mí",
-    "Algunas veces es cierto para mí",
-    "No es cierto para mí"
+    "1. Es cierto para mí",
+    "2. Algunas veces es cierto para mí",
+    "3. No es cierto para mí"
 ]; 
