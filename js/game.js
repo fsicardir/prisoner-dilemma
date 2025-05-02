@@ -60,11 +60,16 @@ export function processChoice(playerChoice) {
     const timeTaken = (roundEndTime - roundStartTime) / 1000; // Convert to seconds
     totalGameTime += timeTaken;
     
-    // Store player's choice
-    playerLastChoice = playerChoice;
+    // Determine opponent's choice: cooperate in first round, then copy player's last move
+    let opponentChoice;
+    if (currentRound === 1) {
+        opponentChoice = 'cooperar'; // Always cooperate in first round
+    } else {
+        opponentChoice = playerLastChoice; // Copy player's previous move
+    }
     
-    // Simulate opponent's choice (for now, random)
-    const opponentChoice = Math.random() < 0.5 ? 'cooperar' : 'traicionar';
+    // Store player's choice for next round
+    playerLastChoice = playerChoice;
     
     // Get scores from matrix
     const [playerPoints, opponentPoints] = SCORE_MATRIX[playerChoice][opponentChoice];
@@ -120,15 +125,11 @@ function addToHistory(round, playerChoice, opponentChoice, playerPoints, opponen
     const opponentPointsCell = document.createElement('td');
     opponentPointsCell.textContent = opponentPoints;
     
-    const timeCell = document.createElement('td');
-    timeCell.textContent = timeTaken.toFixed(1) + 's';
-    
     row.appendChild(roundCell);
     row.appendChild(playerCell);
     row.appendChild(opponentCell);
     row.appendChild(playerPointsCell);
     row.appendChild(opponentPointsCell);
-    row.appendChild(timeCell);
     
     elements.game.gameHistoryTable.appendChild(row);
     updateTotalsRow();
@@ -151,13 +152,9 @@ function updateTotalsRow() {
     const opponentTotalCell = document.createElement('td');
     opponentTotalCell.textContent = opponentScore;
     
-    const timeTotalCell = document.createElement('td');
-    timeTotalCell.textContent = totalGameTime.toFixed(1) + 's';
-    
     row.appendChild(emptyCell);
     row.appendChild(playerTotalCell);
     row.appendChild(opponentTotalCell);
-    row.appendChild(timeTotalCell);
     
     elements.game.gameHistoryFooter.appendChild(row);
 }
@@ -222,27 +219,28 @@ async function endGame() {
 // Save user data to Firestore
 async function saveUserData() {
     try {
-        // Collect form responses
+        // Collect form responses (already flattened)
         const questionnaireResponses = collectAllResponses();
         
-        // Add game data
-        const gameData = {
-            playerFinalScore: playerScore,
-            opponentFinalScore: opponentScore,
-            gameHistory: gameHistory,
-            totalGameTime: totalGameTime,
-            timestamp: new Date().toISOString()
-        };
+        // Add game data with prefixes
+        questionnaireResponses['game_playerFinalScore'] = playerScore;
+        questionnaireResponses['game_opponentFinalScore'] = opponentScore;
+        questionnaireResponses['game_totalGameTime'] = totalGameTime;
+        questionnaireResponses['game_timestamp'] = new Date().toISOString();
+        questionnaireResponses['submittedAt'] = new Date().toISOString();
         
-        // Combine all data
-        const userData = {
-            ...questionnaireResponses,
-            game: gameData,
-            submittedAt: new Date().toISOString()
-        };
+        // Add game history as separate rows with prefixes
+        gameHistory.forEach((round, index) => {
+            questionnaireResponses[`game_history_${index+1}_round`] = round.round;
+            questionnaireResponses[`game_history_${index+1}_playerChoice`] = round.playerChoice;
+            questionnaireResponses[`game_history_${index+1}_opponentChoice`] = round.opponentChoice;
+            questionnaireResponses[`game_history_${index+1}_playerPoints`] = round.playerPoints;
+            questionnaireResponses[`game_history_${index+1}_opponentPoints`] = round.opponentPoints;
+            questionnaireResponses[`game_history_${index+1}_timeTaken`] = round.timeTaken;
+        });
         
         // Save to Firestore
-        await saveUserResponses(userData);
+        await saveUserResponses(questionnaireResponses);
         console.log("User data saved successfully");
     } catch (error) {
         console.error("Error saving user data:", error);

@@ -56,25 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.consentButtons.reject.addEventListener('click', async () => {
         document.getElementById('consent-choice').value = 'reject';
         
-        // Create empty form data but include the consent choice
-        const consentData = {
-            'consent-choice': 'reject'
-        };
-        
-        // Save to Firestore with empty form data except for consent
+        // Create empty form data with prefixes for rejected consent
         const userData = {
-            consent: consentData,
-            sociodemografico: {},
-            iri: {},
-            mdmq: {},
-            game: {
-                playerFinalScore: 0,
-                opponentFinalScore: 0,
-                gameHistory: [],
-                totalGameTime: 0,
-                timestamp: new Date().toISOString()
-            },
-            submittedAt: new Date().toISOString()
+            'consent_consent-choice': 'reject',
+            'submittedAt': new Date().toISOString()
         };
         
         try {

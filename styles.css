@@ -115,6 +115,20 @@ select {
     background-color: #2980b9;
 }
 
+/* Centrado de botones de continuar/siguiente */
+form .btn[type="submit"] {
+    display: block;
+    margin: 30px auto 10px;
+    min-width: 150px;
+}
+
+/* Centrado del botón Entendido en la sección de explicación */
+#start-game {
+    display: block;
+    margin: 30px auto 10px;
+    min-width: 150px;
+}
+
 /* Estilos para el juego */
 .game-info {
     display: flex;
@@ -317,6 +331,15 @@ tfoot td {
 .instructions {
     margin-bottom: 20px;
     text-align: justify;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-left: 4px solid #3498db;
+    border-radius: 6px;
+    padding: 15px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #495057;
 }
 
 /* Estilos para el mensaje de agradecimiento */

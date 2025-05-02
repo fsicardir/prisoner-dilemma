@@ -39,10 +39,28 @@ export function collectAllResponses() {
   const mdmqForm = document.getElementById('mdmq-form');
   const mdmqData = getFormData(mdmqForm);
   
-  return {
-    consent: consentData,
-    sociodemografico: sociodemograficData,
-    iri: iriData,
-    mdmq: mdmqData
-  };
+  // Create a flat object with prefixed keys
+  const flatData = {};
+  
+  // Add consent data with prefix
+  Object.entries(consentData).forEach(([key, value]) => {
+    flatData[`consent_${key}`] = value;
+  });
+  
+  // Add sociodemographic data with prefix
+  Object.entries(sociodemograficData).forEach(([key, value]) => {
+    flatData[`socio_${key}`] = value;
+  });
+  
+  // Add IRI data with prefix
+  Object.entries(iriData).forEach(([key, value]) => {
+    flatData[`iri_${key}`] = value;
+  });
+  
+  // Add MDMQ data with prefix
+  Object.entries(mdmqData).forEach(([key, value]) => {
+    flatData[`mdmq_${key}`] = value;
+  });
+  
+  return flatData;
 } 
