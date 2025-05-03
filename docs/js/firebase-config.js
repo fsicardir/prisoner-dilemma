@@ -2,6 +2,8 @@
 // Import the necessary functions from the Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { initializeAppCheck, getToken, setTokenAutoRefreshEnabled } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
+import { EnterpriseCaptchaProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
 
 // Your web app's Firebase configuration
 // Replace with your actual Firebase project configuration
@@ -16,6 +18,25 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase App Check with Enterprise CAPTCHA provider
+// Replace 'SITE_KEY' with your actual Enterprise CAPTCHA site key
+const appCheck = initializeAppCheck(app, {
+  provider: new EnterpriseCaptchaProvider('6LdxBCwrAAAAAIPsLwcHeo1serqxiKDJVF6FnJCO'),
+  isTokenAutoRefreshEnabled: true
+});
+
+// Export App Check functions if needed
+export async function getAppCheckToken() {
+  try {
+    const appCheckTokenResponse = await getToken(appCheck, /* forceRefresh= */ false);
+    return appCheckTokenResponse.token;
+  } catch (error) {
+    console.error('Error getting App Check token:', error);
+    return null;
+  }
+}
+
 const db = getFirestore(app);
 
 // Function to save user responses to Firestore
