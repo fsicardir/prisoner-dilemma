@@ -2,8 +2,8 @@
 // Import the necessary functions from the Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { initializeAppCheck, getToken, setTokenAutoRefreshEnabled } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
-import { EnterpriseCaptchaProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
+import { initializeAppCheck, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
+import { ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
 
 // Your web app's Firebase configuration
 // Replace with your actual Firebase project configuration
@@ -20,9 +20,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase App Check with Enterprise CAPTCHA provider
-// Replace 'SITE_KEY' with your actual Enterprise CAPTCHA site key
 const appCheck = initializeAppCheck(app, {
-  provider: new EnterpriseCaptchaProvider('6LdxBCwrAAAAAIPsLwcHeo1serqxiKDJVF6FnJCO'),
+  provider: new ReCaptchaEnterpriseProvider('6LdxBCwrAAAAAIPsLwcHeo1serqxiKDJVF6FnJCO'),
   isTokenAutoRefreshEnabled: true
 });
 
@@ -49,4 +48,4 @@ export async function saveUserResponses(userData) {
     console.error("Error adding document: ", error);
     return false;
   }
-} 
+}
