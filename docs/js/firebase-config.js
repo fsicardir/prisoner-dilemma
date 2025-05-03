@@ -21,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase App Check with Enterprise CAPTCHA provider
 const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaEnterpriseProvider('6LdxBCwrAAAAAIPsLwcHeo1serqxiKDJVF6FnJCO'),
+  provider: new ReCaptchaEnterpriseProvider('6LfzcCwrAAAAAEqpOc3BCkS73YmyuIxwRzh8s5i0'),
   isTokenAutoRefreshEnabled: true
 });
 
