@@ -1,5 +1,5 @@
 // Game constants
-export const MAX_ROUNDS = 6;
+export const MAX_ROUNDS = 10;
 
 // Score matrix for the prisoner's dilemma
 export const SCORE_MATRIX = {

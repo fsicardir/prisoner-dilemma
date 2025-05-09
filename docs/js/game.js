@@ -8,6 +8,11 @@ let currentRound = 1;
 let playerScore = 0;
 let opponentScore = 0;
 let playerLastChoice = null;
+let opponentLastChoice = null;
+let opponentLastPoints = null;
+let consecutiveCooperation = 0;
+let explorerModeUsed = false;
+let justUsedExplorerMode = false;
 let gameHistory = [];
 let roundStartTime = null;
 let gameStartTime = null;
@@ -19,6 +24,11 @@ export function initGame() {
     playerScore = 0;
     opponentScore = 0;
     playerLastChoice = null;
+    opponentLastChoice = null;
+    opponentLastPoints = null;
+    consecutiveCooperation = 0;
+    explorerModeUsed = false;
+    justUsedExplorerMode = false;
     gameHistory = [];
     gameStartTime = Date.now();
     totalGameTime = 0;
@@ -60,19 +70,44 @@ export function processChoice(playerChoice) {
     const timeTaken = (roundEndTime - roundStartTime) / 1000; // Convert to seconds
     totalGameTime += timeTaken;
     
-    // Determine opponent's choice: cooperate in first round, then copy player's last move
+    // Determine opponent's choice based on Pavlov strategy with explorer mode
     let opponentChoice;
+    
     if (currentRound === 1) {
-        opponentChoice = 'cooperar'; // Always cooperate in first round
+        // First round: always cooperate
+        opponentChoice = 'cooperar';
+    } else if (!explorerModeUsed && consecutiveCooperation >= 2) {
+        // Explorer mode: after two consecutive cooperation rounds, betray once
+        opponentChoice = 'traicionar';
+        explorerModeUsed = true;
+        justUsedExplorerMode = true;
+        consecutiveCooperation = 0;
+    } else if (justUsedExplorerMode) {
+        // After explorer mode betrayal, always cooperate
+        opponentChoice = 'cooperar';
+        justUsedExplorerMode = false;
+    } else if (opponentLastPoints === 3 || opponentLastPoints === 5) {
+        // Good result (3 or 5 points): repeat the same choice
+        opponentChoice = opponentLastChoice;
     } else {
-        opponentChoice = playerLastChoice; // Copy player's previous move
+        // Bad result (0 or 1 point): switch choice
+        opponentChoice = opponentLastChoice === 'cooperar' ? 'traicionar' : 'cooperar';
     }
     
-    // Store player's choice for next round
-    playerLastChoice = playerChoice;
+    // Track consecutive cooperation
+    if (playerChoice === 'cooperar' && opponentChoice === 'cooperar') {
+        consecutiveCooperation++;
+    } else {
+        consecutiveCooperation = 0;
+    }
     
     // Get scores from matrix
     const [playerPoints, opponentPoints] = SCORE_MATRIX[playerChoice][opponentChoice];
+    
+    // Store choices and points for next round
+    playerLastChoice = playerChoice;
+    opponentLastChoice = opponentChoice;
+    opponentLastPoints = opponentPoints;
     
     // Update scores
     playerScore += playerPoints;
