@@ -65,12 +65,12 @@
                 <div class="form-group" id="diagnosticos-group">
                     <label>4. En caso de padecer algun trastorno psicopatologico, ¿cual o cuales?</label>
                     <div class="checkbox-group">
-                        <label><input type="checkbox" name="diagnosticos" value="trastornos_estado_animo" class="diagnostico-checkbox"> Trastornos del estado de ánimo</label>
-                        <label><input type="checkbox" name="diagnosticos" value="trastorno_espectro_autista" class="diagnostico-checkbox"> Trastorno del espectro autista</label>
-                        <label><input type="checkbox" name="diagnosticos" value="trastornos_sueno" class="diagnostico-checkbox"> Trastornos del sueño (insomnio, etc)</label>
-                        <label><input type="checkbox" name="diagnosticos" value="trastorno_especifico_lenguaje" class="diagnostico-checkbox"> Trastorno específico del lenguaje</label>
-                        <label><input type="checkbox" name="diagnosticos" value="tdah" class="diagnostico-checkbox"> Trastorno por déficit de atención e hiperactividad</label>
-                        <label><input type="checkbox" name="diagnosticos" value="otros" class="diagnostico-checkbox"> Otros: <input type="text" name="diagnosticos_otros" id="diagnosticos-otros"></label>
+                        <label><input type="checkbox" name="diagnosticos[]" value="trastornos_estado_animo" class="diagnostico-checkbox"> Trastornos del estado de ánimo</label>
+                        <label><input type="checkbox" name="diagnosticos[]" value="trastorno_espectro_autista" class="diagnostico-checkbox"> Trastorno del espectro autista</label>
+                        <label><input type="checkbox" name="diagnosticos[]" value="trastornos_sueno" class="diagnostico-checkbox"> Trastornos del sueño (insomnio, etc)</label>
+                        <label><input type="checkbox" name="diagnosticos[]" value="trastorno_especifico_lenguaje" class="diagnostico-checkbox"> Trastorno específico del lenguaje</label>
+                        <label><input type="checkbox" name="diagnosticos[]" value="tdah" class="diagnostico-checkbox"> Trastorno por déficit de atención e hiperactividad</label>
+                        <label><input type="checkbox" name="diagnosticos[]" value="otros" class="diagnostico-checkbox"> Otros: <input type="text" name="diagnosticos_otros" id="diagnosticos-otros"></label>
                     </div>
                 </div>
 
@@ -298,7 +298,7 @@
             });
             
             // For diagnosticos (diagnosis)
-            const diagnosticosOtro = document.querySelector('input[name="diagnosticos"][value="otros"]');
+            const diagnosticosOtro = document.querySelector('input[name="diagnosticos[]"][value="otros"]');
             const diagnosticosOtroInput = document.getElementById('diagnosticos-otros');
             
             diagnosticosOtro.addEventListener('change', function() {

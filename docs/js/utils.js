@@ -9,10 +9,7 @@ export function getFormData(formElement) {
     // Handle checkbox groups by creating arrays
     if (key.includes('[]')) {
       const cleanKey = key.replace('[]', '');
-      if (!data[cleanKey]) {
-        data[cleanKey] = [];
-      }
-      data[cleanKey].push(value);
+      data[cleanKey+"_value_"+value] = true;
     } else {
       data[key] = value;
     }
