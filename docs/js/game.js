@@ -13,6 +13,9 @@ let opponentLastPoints = null;
 let consecutiveCooperation = 0;
 let explorerModeUsed = false;
 let justUsedExplorerMode = false;
+let consecutivePlayerBetrayal = 0;
+let suspicionModeActive = false;
+let suspicionModeUsed = false;
 let gameHistory = [];
 let roundStartTime = null;
 let gameStartTime = null;
@@ -29,6 +32,9 @@ export function initGame() {
     consecutiveCooperation = 0;
     explorerModeUsed = false;
     justUsedExplorerMode = false;
+    consecutivePlayerBetrayal = 0;
+    suspicionModeActive = false;
+    suspicionModeUsed = false;
     gameHistory = [];
     gameStartTime = Date.now();
     totalGameTime = 0;
@@ -70,12 +76,35 @@ export function processChoice(playerChoice) {
     const timeTaken = (roundEndTime - roundStartTime) / 1000; // Convert to seconds
     totalGameTime += timeTaken;
     
-    // Determine opponent's choice based on Pavlov strategy with explorer mode
+    // Track consecutive betrayals by the player
+    if (playerChoice === 'traicionar') {
+        consecutivePlayerBetrayal++;
+    } else {
+        consecutivePlayerBetrayal = 0;
+    }
+    
+    // Check if suspicion mode should be activated
+    if (!suspicionModeUsed && consecutivePlayerBetrayal >= 2) {
+        suspicionModeActive = true;
+        suspicionModeUsed = true;
+    }
+    
+    // Determine opponent's choice based on Pavlov strategy with explorer mode and suspicion mode
     let opponentChoice;
     
     if (currentRound === 1) {
         // First round: always cooperate
         opponentChoice = 'cooperar';
+    } else if (suspicionModeActive) {
+        // In suspicion mode, always betray until player cooperates
+        if (playerLastChoice === 'cooperar') {
+            // Player cooperated in the last round, exit suspicion mode and cooperate
+            suspicionModeActive = false;
+            opponentChoice = 'cooperar';
+        } else {
+            // Continue suspicion mode by betraying
+            opponentChoice = 'traicionar';
+        }
     } else if (!explorerModeUsed && consecutiveCooperation >= 2) {
         // Explorer mode: after two consecutive cooperation rounds, betray once
         opponentChoice = 'traicionar';
